@@ -3,213 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>مجمع أضواء كربلاء</title>
+    <title>مكتب أضواء كربلاء</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary: #009688;
+            --primary: #00897b;
             --primary-light: #b2dfdb;
-            --accent: #ff9800;
-            --bg: #f8f9fa;
+            --accent: #fdd835;
+            --bg: #f5f5f5;
             --surface: #ffffff;
-            --text-dark: #263238;
-            --danger: #ef5350;
-            --success: #66bb6a;
+            --text-dark: #37474f;
+            --danger: #e53935;
+            --success: #43a047;
             --lock-bg: #004d40;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); padding-bottom: 90px; color: var(--text-dark); overflow-x: hidden; }
 
-        /* --- Animations & Transitions --- */
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        button, .nav-item { transition: all 0.2s ease; }
-        button:active { transform: scale(0.95); }
-
         /* --- Lock Screen --- */
         #lock-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--lock-bg); z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: white; transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            color: white; transition: transform 0.5s ease-in-out;
         }
         .fingerprint-icon { font-size: 80px; color: var(--primary-light); animation: pulse 2s infinite; cursor: pointer; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.7; } }
         .pin-input { padding: 12px; border-radius: 30px; border: none; text-align: center; font-size: 1.4rem; width: 160px; margin-top: 25px; letter-spacing: 8px; background: rgba(255,255,255,0.1); color: white; outline: none; }
-        .pin-input::placeholder { color: rgba(255,255,255,0.5); letter-spacing: 0; font-size: 1rem; }
-
+        
         /* --- Header --- */
         header {
-            background-color: var(--primary-light); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+            background-color: var(--primary); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
         }
-        .header-title { font-weight: 700; font-size: 1.1rem; color: #004d40; }
-        .header-icons i { font-size: 1.2rem; margin-left: 10px; cursor: pointer; color: #00695c; padding: 5px; border-radius: 50%; }
-        .header-icons i:active { background: rgba(0,0,0,0.1); }
+        .header-title { font-weight: 700; font-size: 1.1rem; }
+        .header-icons i { font-size: 1.2rem; margin-left: 10px; cursor: pointer; color: white; }
 
-        /* --- Cards & Layout --- */
-        section { display: none; padding: 15px; }
+        /* --- Layout --- */
+        section { display: none; padding: 15px; animation: fadeIn 0.3s ease-out; }
         section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .card { background: var(--surface); border-radius: 16px; padding: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); position: relative; overflow: hidden; }
-        
-        .stat-card { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 110px; }
-        .stat-val { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin: 5px 0; }
-        .stat-label { font-size: 0.9rem; color: #78909c; }
+        .card { background: var(--surface); border-radius: 12px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-box { background: #e0f2f1; padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-val { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
 
-        /* --- Debt Item List (The "Register") --- */
-        .debt-item {
-            background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04); border-right: 5px solid var(--danger);
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .debt-item.paid { border-right-color: var(--success); opacity: 0.7; }
+        /* --- Inputs & Buttons --- */
+        .input-group { margin-bottom: 15px; }
+        .input-label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+        .input-box { width: 100%; padding: 12px; border: 1px solid #cfd8dc; border-radius: 8px; font-size: 1rem; outline: none; }
+        .input-box:focus { border-color: var(--primary); border-width: 2px; }
         
-        .debt-header { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-        .debt-details { display: flex; justify-content: space-between; font-size: 0.9rem; color: #546e7a; }
-        .debt-progress-bg { background: #eee; height: 6px; border-radius: 3px; width: 100%; margin-top: 5px; overflow: hidden; }
-        .debt-progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s ease; }
-        
-        /* --- Forms --- */
-        .input-box { width: 100%; padding: 14px; background: #f0f4c3; border: none; border-radius: 10px; margin-bottom: 12px; font-size: 1rem; color: #333; outline: none; }
-        .input-box:focus { background: #fff; box-shadow: 0 0 0 2px var(--primary); }
-        .btn-main { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0,150,136,0.3); }
+        .btn-main { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-pay { background: var(--text-dark); color: white; padding: 8px; border-radius: 6px; width: 100%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+        /* --- Debt List --- */
+        .debt-item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        .debt-info h4 { margin-bottom: 3px; color: var(--text-dark); }
+        .debt-info small { color: #78909c; }
+        .debt-amount { font-weight: bold; color: var(--danger); font-size: 1.1rem; }
 
         /* --- Bottom Nav --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; background: white; 
-            display: flex; justify-content: space-around; padding: 12px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 900;
+            display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; z-index: 900;
         }
-        .nav-item { text-align: center; color: #b0bec5; font-size: 0.75rem; cursor: pointer; flex: 1; }
-        .nav-item i { font-size: 1.5rem; margin-bottom: 4px; display: block; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .nav-item { text-align: center; color: #b0bec5; font-size: 0.75rem; flex: 1; cursor: pointer; }
+        .nav-item i { font-size: 1.5rem; margin-bottom: 4px; display: block; }
         .nav-item.active { color: var(--primary); font-weight: 700; }
-        .nav-item.active i { transform: translateY(-5px); color: var(--primary); }
 
-        /* Print Override */
-        @media print {
-            #lock-screen, .bottom-nav, .header-icons, .btn-main { display: none !important; }
-            body { background: white; padding: 0; }
-            .card, .debt-item { box-shadow: none; border: 1px solid #000; break-inside: avoid; }
-        }
+        @media print { .no-print { display: none !important; } body { padding: 0; background: white; } }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <h2 style="margin-bottom: 30px;">مجمع أضواء كربلاء</h2>
+    <div id="lock-screen" class="no-print">
+        <h2 style="margin-bottom: 30px;">مكتب أضواء كربلاء</h2>
         <div onclick="showLockMsg()"><i class="fa-solid fa-fingerprint fingerprint-icon"></i></div>
         <div id="lock-msg" style="color:#ff8a80; height:20px; margin-top:15px; opacity:0; transition:0.3s;">البصمة موقوفة من المطور</div>
         <input type="tel" id="pin-code" class="pin-input" placeholder="الرمز" maxlength="4" oninput="checkPin()">
     </div>
 
     <header>
-        <div class="header-icons"><i class="fa-solid fa-gear"></i></div>
-        <div class="header-title" id="page-title">مجمع أضواء كربلاء</div>
-        <div class="header-icons">
+        <div class="header-icons no-print"><i class="fa-solid fa-gear"></i></div>
+        <div class="header-title" id="page-title">مكتب أضواء كربلاء</div>
+        <div class="header-icons no-print">
             <i class="fa-solid fa-print" onclick="window.print()"></i>
             <i class="fa-solid fa-eye-slash" id="eye-icon" onclick="togglePrivacy()"></i>
         </div>
     </header>
 
-    <section id="home-section" class="active fade-in">
-        <div class="stat-grid">
-            <div class="card stat-card">
-                <i class="fa-solid fa-file-invoice-dollar" style="color:var(--accent); font-size:1.5rem;"></i>
-                <div class="stat-val" id="total-debts-count">0</div>
-                <div class="stat-label">الفواتير المفتوحة</div>
+    <section id="home-section" class="active">
+        <div class="card">
+            <h3 style="margin-bottom: 10px; text-align: center;">ملخص الحسابات</h3>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-val" id="total-customers">0</div>
+                    <small>عدد الزبائن</small>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="total-debts-count" style="color:var(--danger)">0</div>
+                    <small>ديون نشطة</small>
+                </div>
             </div>
-            <div class="card stat-card">
-                <i class="fa-solid fa-calendar-day" style="color:var(--danger); font-size:1.5rem;"></i>
-                <div class="stat-val">5</div>
-                <div class="stat-label">مستحقة اليوم</div>
+            <div style="margin-top: 15px; text-align: center; padding: 10px; background: #ffebee; border-radius: 8px;">
+                <small>إجمالي المبلغ المتبقي بالسوق</small>
+                <div id="hidden-debt" style="font-size: 2rem; font-weight: bold; color: var(--danger); letter-spacing: 3px; margin-top: 5px;">******</div>
             </div>
         </div>
-
-        <div class="card">
-            <h3 style="color:#004d40; margin-bottom:10px;">إجمالي الديون (دولار)</h3>
-            <div id="hidden-debt" style="font-size:2rem; font-weight:bold; color:var(--primary); letter-spacing:3px;">******</div>
-            <button onclick="switchTab('register-section')" style="background:transparent; border:1px solid var(--primary); color:var(--primary); padding:8px 20px; border-radius:20px; margin-top:10px; cursor:pointer;">عرض السجل</button>
+        
+        <div class="card no-print">
+            <button class="btn-main" onclick="switchTab('register-section')" style="background: var(--text-dark);">
+                <i class="fa-solid fa-book"></i> الذهاب إلى سجل الديون
+            </button>
         </div>
     </section>
 
-    <section id="register-section" class="fade-in">
-        <div class="card" style="margin-bottom: 20px; background: #e0f2f1; border: 1px solid var(--primary);">
-            <h3 style="color: var(--primary); margin-bottom: 15px; text-align: center;">تسديد دفعة حساب</h3>
+    <section id="register-section">
+        <div class="card" style="border: 1px solid var(--primary); background: #e0f2f1;">
+            <h3 style="color: var(--primary); margin-bottom: 15px; text-align: center;">تسديد دفعة (واصل)</h3>
             
-            <select id="pay-cust-select" class="input-box" style="background: white;" onchange="calculateCustomerTotal()">
-                <option value="">اختر الزبون للتسديد...</option>
+            <select id="pay-cust-select" class="input-box" style="background: white; margin-bottom: 10px;" onchange="calculateCustomerTotal()">
+                <option value="">اختر الزبون...</option>
             </select>
             
-            <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; margin-bottom: 12px;">
-                <span style="font-weight: bold; color: #555;">المتبقي بذمته:</span>
-                <span id="cust-total-debt" style="font-size: 1.4rem; color: var(--danger); font-weight: bold;">0 $</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                <span>المبلغ المتبقي بذمته:</span>
+                <span id="cust-total-debt" style="font-size: 1.3rem; color: var(--danger); font-weight: bold;">0 $</span>
             </div>
 
-            <div class="stat-grid">
-                <input type="number" id="pay-amount" class="input-box" placeholder="المبلغ الواصل" style="margin-bottom:0; background: white;">
-                <button class="btn-main" onclick="processPayment()" style="background: var(--primary); margin-top:0; box-shadow:none;">تسديد <i class="fa-solid fa-hand-holding-dollar"></i></button>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="pay-amount" class="input-box" placeholder="المبلغ الواصل الآن" style="flex:1;">
+                <button class="btn-main" onclick="processPayment()" style="width: auto; padding: 0 20px;">تسديد</button>
             </div>
         </div>
 
-        <h4 style="margin-bottom: 10px; color: #555; padding-right: 5px;">كشف الحسابات</h4>
+        <h4 style="margin: 10px 5px; color: #555;">قائمة الديون المتبقية</h4>
         <div id="debts-container">
             </div>
     </section>
 
-    <section id="invoice-section" class="fade-in">
+    <section id="invoice-section">
         <div class="card">
-            <h3 style="margin-bottom:15px; text-align:center;">إنشاء قسط جديد</h3>
-            <select id="cust-select" class="input-box"><option value="">اختر الزبون...</option></select>
-            <input type="text" id="item-name" class="input-box" placeholder="اسم المادة المباعة">
-            <div class="stat-grid">
-                <input type="number" id="buy-price" class="input-box" placeholder="سعر الشراء" oninput="calc()">
-                <input type="number" id="profit" class="input-box" placeholder="الربح %" oninput="calc()">
+            <h3 style="margin-bottom: 20px; text-align: center; color: var(--primary);">قائمة بيع جديدة</h3>
+            
+            <div class="input-group">
+                <label class="input-label">اسم الزبون</label>
+                <select id="inv-cust-select" class="input-box"><option value="">اختر الزبون...</option></select>
             </div>
-            <input type="number" id="sell-price" class="input-box" placeholder="سعر البيع النهائي" readonly style="background:#e0e0e0; font-weight:bold;">
-            <div class="stat-grid">
-                <input type="number" id="down-pay" class="input-box" placeholder="المقدمة" oninput="calc()">
-                <input type="number" id="months" class="input-box" placeholder="عدد الأشهر" oninput="calc()">
+
+            <div class="input-group">
+                <label class="input-label">المادة</label>
+                <input type="text" id="inv-item" class="input-box" placeholder="مثال: ايفون 15">
             </div>
-            <div style="text-align:center; margin-bottom:10px; color:#d32f2f; font-weight:bold;">القسط الشهري: <span id="monthly-inst">0</span></div>
-            <button class="btn-main" onclick="saveInvoice()">حفظ في السجل <i class="fa-solid fa-check"></i></button>
+
+            <div class="stat-grid">
+                <div class="input-group">
+                    <label class="input-label">السعر الكلي</label>
+                    <input type="number" id="inv-total" class="input-box" placeholder="0" oninput="calculateInvoice()">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">الواصل (مقدمة)</label>
+                    <input type="number" id="inv-paid" class="input-box" placeholder="0" oninput="calculateInvoice()">
+                </div>
+            </div>
+
+            <div class="input-group" style="background: #ffebee; padding: 10px; border-radius: 8px; text-align: center;">
+                <label class="input-label" style="color: var(--danger);">الباقي (المبلغ المطلوب)</label>
+                <input type="number" id="inv-remaining" class="input-box" readonly style="text-align: center; font-weight: bold; color: var(--danger); font-size: 1.2rem; background: transparent; border: none;">
+            </div>
+
+            <button class="btn-main" onclick="saveInvoice()">حفظ الدين <i class="fa-solid fa-save"></i></button>
         </div>
     </section>
 
-    <section id="customer-section" class="fade-in">
+    <section id="customer-section">
         <div class="card">
-            <h3 style="margin-bottom:15px;">تعريف زبون جديد</h3>
-            <input type="text" id="new-name" class="input-box" placeholder="اسم الزبون">
-            <input type="tel" id="new-phone" class="input-box" placeholder="رقم الهاتف (964...)">
-            <button class="btn-main" onclick="addCustomer()">حفظ</button>
-            <div id="cust-list" style="margin-top:20px;"></div>
+            <h3 style="margin-bottom:15px;">إضافة زبون</h3>
+            <div class="stat-grid">
+                <input type="text" id="new-cust-name" class="input-box" placeholder="الاسم">
+                <input type="tel" id="new-cust-phone" class="input-box" placeholder="رقم الهاتف">
+            </div>
+            <button class="btn-main" onclick="addCustomer()" style="margin-top: 10px;">إضافة</button>
+        </div>
+        <div class="card">
+            <h4>سجل الزبائن</h4>
+            <div id="cust-list" style="margin-top:10px;"></div>
         </div>
     </section>
 
-    <nav class="bottom-nav">
+    <nav class="bottom-nav no-print">
         <div class="nav-item" onclick="switchTab('customer-section', this)"><i class="fa-solid fa-users"></i>الزبائن</div>
         <div class="nav-item" onclick="switchTab('invoice-section', this)"><i class="fa-solid fa-plus-circle"></i>إضافة</div>
-        <div class="nav-item" onclick="switchTab('register-section', this)"><i class="fa-solid fa-book"></i>السجل</div>
-        <div class="nav-item active" onclick="switchTab('home-section', this)"><i class="fa-solid fa-home"></i>الرئيسية</div>
+        <div class="nav-item" onclick="switchTab('register-section', this)"><i class="fa-solid fa-file-invoice-dollar"></i>السجل</div>
+        <div class="nav-item active" onclick="switchTab('home-section', this)"><i class="fa-solid fa-chart-pie"></i>الرئيسية</div>
     </nav>
 
     <script>
-        // --- Data Management ---
+        // --- Data ---
         let customers = JSON.parse(localStorage.getItem('customers')) || [];
         let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
 
-        // --- Init ---
-        window.onload = () => {
-            updateUI();
-            renderCustomers();
-        };
+        window.onload = () => { updateUI(); renderCustomers(); };
 
-        // --- Lock Screen ---
+        // --- Logic ---
         function checkPin() {
             if(document.getElementById('pin-code').value === '100') {
                 document.getElementById('lock-screen').style.transform = 'translateY(-100%)';
@@ -219,7 +220,6 @@
             let m = document.getElementById('lock-msg'); m.style.opacity = 1; setTimeout(()=>m.style.opacity=0, 2000);
         }
 
-        // --- Navigation ---
         function switchTab(id, el) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -227,29 +227,66 @@
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 el.classList.add('active');
             }
-            if(id === 'register-section') {
-                updatePaySelect(); // تحديث قائمة التسديد
-                renderDebts(); 
-            }
+            if(id === 'register-section') { updatePaySelect(); renderDebts(); }
             
-            // Title Update
-            let map = {'home-section':'الاحصائيات', 'register-section':'سجل الديون', 'invoice-section':'فاتورة جديدة', 'customer-section':'الزبائن'};
-            document.getElementById('page-title').innerText = "مجمع أضواء كربلاء - " + (map[id] || '');
+            let map = {'home-section':'الرئيسية', 'register-section':'سجل الديون', 'invoice-section':'بيع جديد', 'customer-section':'الزبائن'};
+            document.getElementById('page-title').innerText = "مكتب أضواء كربلاء - " + (map[id] || '');
         }
 
-        // --- Payment Logic (New) ---
+        // --- Invoice Functions (The Fix) ---
+        function calculateInvoice() {
+            let total = parseFloat(document.getElementById('inv-total').value) || 0;
+            let paid = parseFloat(document.getElementById('inv-paid').value) || 0;
+            let remaining = total - paid;
+            
+            document.getElementById('inv-remaining').value = remaining;
+        }
+
+        function saveInvoice() {
+            let custId = document.getElementById('inv-cust-select').value;
+            let item = document.getElementById('inv-item').value;
+            let total = parseFloat(document.getElementById('inv-total').value);
+            let paid = parseFloat(document.getElementById('inv-paid').value) || 0;
+            let remaining = parseFloat(document.getElementById('inv-remaining').value);
+
+            if(!custId || !item || !total) return alert("يرجى إكمال البيانات");
+
+            let cust = customers.find(c => c.id == custId);
+
+            let newInvoice = {
+                id: Date.now(),
+                cName: cust.name,
+                cPhone: cust.phone,
+                item: item,
+                total: total,     // السعر الكلي
+                paid: paid,       // ما تم دفعه (الواصل)
+                remaining: remaining, // الباقي (الدين الحقيقي)
+                date: new Date().toLocaleDateString('ar-IQ')
+            };
+
+            invoices.push(newInvoice);
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            
+            alert("تم الحفظ! الباقي بذمة الزبون: " + remaining);
+            
+            // Reset Form
+            document.getElementById('inv-item').value = "";
+            document.getElementById('inv-total').value = "";
+            document.getElementById('inv-paid').value = "";
+            document.getElementById('inv-remaining').value = "";
+            
+            updateUI();
+            switchTab('register-section');
+        }
+
+        // --- Payment & Register Logic ---
         function updatePaySelect() {
             let select = document.getElementById('pay-cust-select');
-            select.innerHTML = '<option value="">اختر الزبون للتسديد...</option>';
-            // Show only customers with debts
-            let indebtedCustomers = [...new Set(invoices.filter(i => i.remaining > 0).map(i => i.cName))];
-            
-            customers.forEach(cust => {
-                if(indebtedCustomers.includes(cust.name)) {
-                    let opt = document.createElement('option');
-                    opt.value = cust.id; 
-                    opt.innerText = cust.name;
-                    select.appendChild(opt);
+            select.innerHTML = '<option value="">اختر الزبون...</option>';
+            let indebted = [...new Set(invoices.filter(i => i.remaining > 0).map(i => i.cName))];
+            customers.forEach(c => {
+                if(indebted.includes(c.name)) {
+                    let opt = document.createElement('option'); opt.value = c.id; opt.innerText = c.name; select.appendChild(opt);
                 }
             });
         }
@@ -260,130 +297,80 @@
             if(!custId) { display.innerText = "0 $"; renderDebts(); return; }
 
             let customer = customers.find(c => c.id == custId);
+            // Sum only the remaining amount (الباقي)
             let total = invoices.filter(i => i.cName === customer.name).reduce((sum, inv) => sum + inv.remaining, 0);
             
             display.innerText = total + " $";
-            renderDebts(customer.name); // Filter list to show only this customer
+            renderDebts(customer.name);
         }
 
         function processPayment() {
             let custId = document.getElementById('pay-cust-select').value;
             let amount = parseFloat(document.getElementById('pay-amount').value);
             
-            if(!custId || !amount || amount <= 0) return alert("يرجى اختيار زبون وتحديد مبلغ صحيح");
+            if(!custId || !amount || amount <= 0) return alert("خطأ في المبلغ أو الزبون");
 
             let customer = customers.find(c => c.id == custId);
             let customerInvoices = invoices.filter(inv => inv.cName === customer.name && inv.remaining > 0);
             
-            if(customerInvoices.length === 0) return alert("تم تسديد جميع ديون هذا الزبون مسبقاً");
+            if(customerInvoices.length === 0) return alert("لا توجد ديون");
 
             let remainingToPay = amount;
-            let paidDate = new Date().toLocaleDateString('ar-IQ');
-
-            // توزيع المبلغ على الفواتير (الأقدم أولاً إذا أردت، أو حسب الترتيب الحالي)
+            
             customerInvoices.forEach(inv => {
                 if(remainingToPay > 0) {
                     let deduct = Math.min(inv.remaining, remainingToPay);
-                    inv.remaining -= deduct;
-                    inv.paid += deduct;
+                    inv.remaining -= deduct; // انقاص من الباقي
+                    inv.paid += deduct;      // زيادة في الواصل
                     remainingToPay -= deduct;
-                    
-                    // حفظ التاريخ في سجل الفاتورة
-                    if(!inv.history) inv.history = [];
-                    inv.history.push({ date: paidDate, amount: deduct });
                 }
             });
 
             localStorage.setItem('invoices', JSON.stringify(invoices));
-            alert("تم تسجيل التسديد بنجاح!");
-            
+            alert("تم التسديد بنجاح");
             document.getElementById('pay-amount').value = "";
-            calculateCustomerTotal(); // Update numbers
+            calculateCustomerTotal();
             updateUI();
         }
 
-        // --- Register List Logic ---
         function renderDebts(filterName = "") {
             let container = document.getElementById('debts-container');
             container.innerHTML = "";
-            
             let filtered = invoices.filter(inv => inv.remaining > 0);
             if(filterName) filtered = filtered.filter(inv => inv.cName === filterName);
-            
-            if(filtered.length === 0) {
-                container.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>لا يوجد ديون لعرضها</p>";
-                return;
-            }
+
+            if(filtered.length === 0) container.innerHTML = "<p style='text-align:center; color:#999;'>لا توجد ديون</p>";
 
             filtered.forEach(inv => {
-                let percent = (inv.paid / inv.total) * 100;
                 container.innerHTML += `
                     <div class="debt-item">
-                        <div class="debt-header">
-                            <span>${inv.cName}</span>
-                            <span style="color:var(--danger)">متبقي: ${inv.remaining} $</span>
+                        <div class="debt-info">
+                            <h4>${inv.cName}</h4>
+                            <small>${inv.item} | ${inv.date}</small>
                         </div>
-                        <div class="debt-details">
-                            <span>${inv.item}</span>
-                            <span>${inv.date}</span>
+                        <div class="debt-amount">
+                            ${inv.remaining} $
+                            <div style="font-size:0.7rem; color:#888; font-weight:normal;">من أصل: ${inv.total}</div>
                         </div>
-                        <div class="debt-progress-bg"><div class="debt-progress-fill" style="width:${percent}%"></div></div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">واصل: ${inv.paid}$ | كلي: ${inv.total}$</div>
                     </div>
                 `;
             });
         }
 
-        // --- Invoice Logic ---
-        function calc() {
-            let buy = +document.getElementById('buy-price').value;
-            let profit = +document.getElementById('profit').value;
-            let sell = buy + (buy * profit/100);
-            document.getElementById('sell-price').value = Math.round(sell);
-            
-            let down = +document.getElementById('down-pay').value;
-            let months = +document.getElementById('months').value || 1;
-            document.getElementById('monthly-inst').innerText = Math.round((sell - down) / months);
-        }
-
-        function saveInvoice() {
-            let cid = document.getElementById('cust-select').value;
-            if(!cid) return alert("اختر الزبون");
-            
-            let cust = customers.find(c => c.id == cid);
-            let total = +document.getElementById('sell-price').value;
-            let down = +document.getElementById('down-pay').value;
-            let remaining = total - down;
-
-            invoices.push({
-                id: Date.now(),
-                cName: cust.name,
-                cPhone: cust.phone,
-                item: document.getElementById('item-name').value,
-                total: total,
-                paid: down,
-                remaining: remaining,
-                date: new Date().toLocaleDateString('ar-IQ'),
-                history: [{date: new Date().toLocaleDateString('ar-IQ'), amount: down + " (مقدمة)"}]
-            });
-            localStorage.setItem('invoices', JSON.stringify(invoices));
-            alert("تم الحفظ");
-            updateUI();
-            switchTab('register-section');
-        }
-
         // --- Customers ---
         function addCustomer() {
-            let name = document.getElementById('new-name').value;
+            let name = document.getElementById('new-cust-name').value;
+            let phone = document.getElementById('new-cust-phone').value;
             if(!name) return;
-            customers.push({ id: Date.now(), name: name, phone: document.getElementById('new-phone').value });
+            customers.push({ id: Date.now(), name: name, phone: phone });
             localStorage.setItem('customers', JSON.stringify(customers));
-            alert("تم");
+            alert("تمت الإضافة");
+            document.getElementById('new-cust-name').value = "";
             renderCustomers();
         }
 
         function renderCustomers() {
-            let sel = document.getElementById('cust-select');
+            let sel = document.getElementById('inv-cust-select');
             let list = document.getElementById('cust-list');
             sel.innerHTML = '<option value="">اختر الزبون...</option>';
             list.innerHTML = '';
@@ -393,19 +380,18 @@
             });
         }
 
-        // --- UI Updates ---
+        // --- UI ---
         let privacy = true;
         function togglePrivacy() {
             privacy = !privacy;
-            let totalDebt = invoices.reduce((acc, curr) => acc + curr.remaining, 0);
-            document.getElementById('hidden-debt').innerText = privacy ? "******" : totalDebt + " $";
+            let total = invoices.reduce((acc, curr) => acc + curr.remaining, 0);
+            document.getElementById('hidden-debt').innerText = privacy ? "******" : total + " $";
             document.getElementById('eye-icon').className = privacy ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
-            document.getElementById('hidden-debt').style.color = privacy ? "var(--primary)" : "#d32f2f";
         }
 
         function updateUI() {
-            let activeDebts = invoices.filter(i => i.remaining > 0).length;
-            document.getElementById('total-debts-count').innerText = activeDebts;
+            document.getElementById('total-customers').innerText = customers.length;
+            document.getElementById('total-debts-count').innerText = invoices.filter(i => i.remaining > 0).length;
         }
     </script>
 </body>
