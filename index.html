@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مجمع أضواء كربلاء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4db6ac;
+            --secondary-color: #009688;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --input-bg: #e0f2f1;
+            --danger-color: #d32f2f;
+            --whatsapp-color: #25D366;
+            --lock-bg: #004d40;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); padding-bottom: 80px; }
+
+        /* --- Lock Screen Styles (شاشة القفل) --- */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--lock-bg); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; transition: transform 0.5s ease-in-out;
+        }
+        
+        .fingerprint-container {
+            margin: 30px 0;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .fingerprint-icon {
+            font-size: 80px;
+            color: #4db6ac;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+
+        .lock-msg {
+            color: #ff5252;
+            font-weight: bold;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            height: 25px;
+        }
+
+        .pin-input {
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            text-align: center;
+            font-size: 1.2rem;
+            width: 150px;
+            margin-top: 20px;
+            letter-spacing: 5px;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: #b2dfdb; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;
+        }
+        .header-title { font-weight: 700; font-size: 1.1rem; color: #004d40; }
+        .header-icons i { font-size: 1.3rem; margin: 0 8px; cursor: pointer; color: #004d40; }
+
+        /* --- Sections & Cards --- */
+        section { display: none; padding: 15px; animation: fadeIn 0.3s; }
+        section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; margin-bottom: 10px; }
+        .card-header { background: var(--primary-color); padding: 8px; font-weight: bold; font-size: 0.95rem; }
+        .card-body { padding: 15px; }
+        .number-big { font-size: 1.8rem; font-weight: bold; color: var(--secondary-color); }
+        .btn-details { background: #0277bd; color: white; border: none; padding: 5px 15px; border-radius: 5px; margin-top: 5px; cursor: pointer; }
+
+        /* --- Forms --- */
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        .form-input { 
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
+            font-size: 1rem; background-color: #fff; outline: none; transition: 0.3s;
+        }
+        .form-input:focus { border-color: var(--primary-color); background-color: #fff; }
+        .radio-group { display: flex; gap: 15px; justify-content: center; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 8px; }
+        .btn-save { width: 100%; background: var(--secondary-color); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around;
+            padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); border-top: 1px solid #eee; z-index: 900;
+        }
+        .nav-item { text-align: center; color: #90a4ae; text-decoration: none; font-size: 0.75rem; cursor: pointer; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; display: block; }
+        .nav-item.active { color: var(--secondary-color); font-weight: bold; }
+
+        .hidden-value { letter-spacing: 3px; font-weight: bold; color: var(--danger-color); }
+
+        /* --- Print Styles --- */
+        @media print {
+            #lock-screen, .bottom-nav, .header-icons, .btn-save, .btn-details { display: none !important; }
+            header { position: relative; box-shadow: none; border-bottom: 2px solid #000; }
+            body { padding-bottom: 0; background: white; }
+            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <h2 style="margin-bottom: 20px;">مجمع أضواء كربلاء</h2>
+        
+        <div class="fingerprint-container" onclick="showLockMessage()">
+            <i class="fa-solid fa-fingerprint fingerprint-icon"></i>
+        </div>
+        
+        <div id="lock-msg-box" class="lock-msg">البصمة متوقفة.. مقفلة من قبل المطور</div>
+        
+        <input type="password" id="pin-code" class="pin-input" placeholder="الرمز" maxlength="4" oninput="checkPin()">
+        <small style="margin-top: 10px; color: #80cbc4;">أدخل الرمز لفتح التطبيق</small>
+    </div>
+
+    <header>
+        <div class="header-icons"><i class="fa-solid fa-gear"></i></div>
+        <div class="header-title" id="page-title">مجمع أضواء كربلاء</div>
+        <div class="header-icons">
+            <i class="fa-solid fa-print" onclick="printPage()"></i> <i class="fa-solid fa-eye-slash" id="toggle-eye" onclick="togglePrivacy()"></i>
+        </div>
+    </header>
+
+    <section id="home-section" class="active">
+        <div class="grid-container">
+            <div class="card">
+                <div class="card-header">بحث</div>
+                <div class="card-body"><i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; color: #1565c0;"></i></div>
+            </div>
+            <div class="card">
+                <div class="card-header">الفواتير المفتوحة</div>
+                <div class="card-body"><span class="number-big" id="open-invoices-count">0</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">ديون الدولار</div>
+            <div class="card-body">
+                <div class="hidden-value" id="debt-dollar">******</div>
+                <button class="btn-details">تفاصيل</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">أقساط مستحقة اليوم</div>
+            <div class="card-body">
+                <span class="number-big" style="color: #d32f2f;" id="due-today">0</span>
+                <br><small>قسط</small>
+            </div>
+        </div>
+    </section>
+
+    <section id="invoice-section">
+        <div class="card">
+            <div class="card-header">فاتورة بيع بالقسط جديدة</div>
+            <div class="card-body">
+                <div class="radio-group">
+                    <label><input type="radio" name="currency" value="dollar" checked> دولار</label>
+                    <label><input type="radio" name="currency" value="dinar"> دينار</label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">اختر الزبون</label>
+                    <select id="customer-select" class="form-input"><option value="">اختر من القائمة...</option></select>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="item-name" class="form-input" placeholder="اسم المادة">
+                </div>
+                <div class="grid-container">
+                    <input type="number" id="buy-price" class="form-input" placeholder="سعر الشراء" oninput="calculatePrice()">
+                    <input type="number" id="profit-percent" class="form-input" placeholder="نسبة الربح %" oninput="calculatePrice()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">سعر البيع</label>
+                    <input type="number" id="sell-price" class="form-input" readonly style="background: #eee;">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="down-payment" class="form-input" placeholder="المقدمة" oninput="calculateInstallment()">
+                </div>
+                <div class="grid-container">
+                    <input type="number" id="months-count" class="form-input" placeholder="عدد الأقساط" oninput="calculateInstallment()">
+                    <input type="number" id="installment-amount" class="form-input" placeholder="القسط" readonly style="background: #eee; font-weight:bold; color: #d32f2f;">
+                </div>
+                <button class="btn-save" onclick="saveInvoice()">حفظ ومشاركة <i class="fa-brands fa-whatsapp"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="customer-section">
+        <div class="card">
+            <div class="card-header">إضافة زبون جديد</div>
+            <div class="card-body">
+                <div class="form-group"><input type="text" id="cust-name" class="form-input" placeholder="الاسم الثلاثي"></div>
+                <div class="form-group"><input type="tel" id="cust-phone" class="form-input" placeholder="رقم الهاتف (واتساب)"></div>
+                <button class="btn-save" onclick="addCustomer()">حفظ الزبون</button>
+                <hr style="margin: 20px 0;">
+                <div id="customers-list"></div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="bottom-nav">
+        <div class="nav-item" onclick="switchTab('customer-section', this)"><i class="fa-solid fa-users"></i> الزبائن</div>
+        <div class="nav-item" onclick="switchTab('invoice-section', this)"><i class="fa-solid fa-cart-plus"></i> فاتورة</div>
+        <div class="nav-item active" onclick="switchTab('home-section', this)"><i class="fa-solid fa-house"></i> الرئيسية</div>
+    </nav>
+
+    <script>
+        // --- Lock Screen Logic ---
+        function showLockMessage() {
+            let msg = document.getElementById('lock-msg-box');
+            msg.style.opacity = '1';
+            setTimeout(() => { msg.style.opacity = '0'; }, 3000);
+        }
+
+        function checkPin() {
+            let pin = document.getElementById('pin-code').value;
+            if (pin === '100') {
+                // Pin Correct -> Hide Lock Screen with slide up effect
+                let lockScreen = document.getElementById('lock-screen');
+                lockScreen.style.transform = 'translateY(-100%)';
+            }
+        }
+
+        // --- Print Logic ---
+        function printPage() {
+            window.print();
+        }
+
+        // --- App Logic (Previous Code) ---
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+        let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
+
+        window.onload = function() {
+            updateDashboard();
+            renderCustomersSelect();
+            renderCustomersList();
+        };
+
+        function switchTab(sectionId, element) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            // تغيير العنوان ديناميكياً مع الحفاظ على اسم المجمع في البداية
+            let titles = {'home-section': 'الاحصائيات', 'invoice-section': 'فاتورة جديدة', 'customer-section': 'إدارة الزبائن'};
+            document.getElementById('page-title').innerText = "مجمع أضواء كربلاء - " + titles[sectionId];
+        }
+
+        let isPrivate = true;
+        function togglePrivacy() {
+            isPrivate = !isPrivate;
+            const eyeIcon = document.getElementById('toggle-eye');
+            const debtField = document.getElementById('debt-dollar');
+            if (isPrivate) {
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+                debtField.innerText = "******";
+                debtField.classList.add('hidden-value');
+            } else {
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+                debtField.innerText = "5000 $"; // مثال
+                debtField.classList.remove('hidden-value');
+            }
+        }
+
+        function calculatePrice() {
+            let buy = parseFloat(document.getElementById('buy-price').value) || 0;
+            let profit = parseFloat(document.getElementById('profit-percent').value) || 0;
+            document.getElementById('sell-price').value = Math.round(buy + (buy * (profit / 100)));
+            calculateInstallment();
+        }
+
+        function calculateInstallment() {
+            let sell = parseFloat(document.getElementById('sell-price').value) || 0;
+            let down = parseFloat(document.getElementById('down-payment').value) || 0;
+            let months = parseFloat(document.getElementById('months-count').value) || 1;
+            document.getElementById('installment-amount').value = Math.round((sell - down) / months);
+        }
+
+        function addCustomer() {
+            let name = document.getElementById('cust-name').value;
+            let phone = document.getElementById('cust-phone').value;
+            if(name === "") return alert("اكتب الاسم");
+            customers.push({ id: Date.now(), name: name, phone: phone });
+            localStorage.setItem('customers', JSON.stringify(customers));
+            alert("تم"); renderCustomersSelect(); renderCustomersList();
+            document.getElementById('cust-name').value = "";
+        }
+
+        function renderCustomersSelect() {
+            let select = document.getElementById('customer-select');
+            select.innerHTML = '<option value="">اختر من القائمة...</option>';
+            customers.forEach(c => { let o = document.createElement('option'); o.value = c.id; o.text = c.name; select.appendChild(o); });
+        }
+
+        function renderCustomersList() {
+            let list = document.getElementById('customers-list');
+            list.innerHTML = "";
+            customers.forEach(c => {
+                list.innerHTML += `<div style="background:#f1f1f1; padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between;"><span>${c.name}</span><a href="https://wa.me/${c.phone}" style="color:#25D366;"><i class="fa-brands fa-whatsapp"></i></a></div>`;
+            });
+        }
+
+        function saveInvoice() {
+            let custId = document.getElementById('customer-select').value;
+            if(custId === "") return alert("اختر الزبون");
+            let customer = customers.find(c => c.id == custId);
+            invoices.push({ id: Date.now(), customerName: customer.name });
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            updateDashboard();
+            if(customer.phone && confirm("إرسال عبر واتساب؟")) window.open(`https://wa.me/${customer.phone}`, '_blank');
+        }
+
+        function updateDashboard() {
+            document.getElementById('open-invoices-count').innerText = invoices.length;
+        }
+    </script>
+</body>
+</html>
